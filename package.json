@@ -1,0 +1,35 @@
+{
+  "name": "react-native-input-keyboard",
+  "version": "0.0.1",
+  "keywords": [
+    "react",
+    "react-native",
+    "input",
+    "keyboard",
+    "avoiding"
+  ],
+  "license": "MIT",
+  "repository": "https://github.com/caioedut/react-native-input-keyboard",
+  "author": {
+    "name": "Caio Teixeira",
+    "email": "caioedut@gmail.com"
+  },
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "pmex rimraf ./dist",
+    "build": "pmex tsc --build"
+  },
+  "devDependencies": {
+    "pmex": "^0.0.34",
+    "rimraf": "^5.0.1",
+    "react": "latest",
+    "react-native": "latest"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  }
+}
