@@ -3,7 +3,7 @@ import {GestureResponderEvent, Keyboard, KeyboardAvoidingView, KeyboardAvoidingV
 
 export type ReactNativeInputKeyboardProps = {
   onPress?: (event: GestureResponderEvent) => void
-} & Omit<KeyboardAvoidingViewProps, 'behavior' | 'onStartShouldSetResponder' | 'onResponderGrant'>;
+} & Omit<KeyboardAvoidingViewProps, 'behavior'| 'contentContainerStyle' | 'onStartShouldSetResponder' | 'onResponderGrant'>;
 
 export default function ReactNativeInputKeyboard({children, onPress, ...rest}: ReactNativeInputKeyboardProps) {
   return (
