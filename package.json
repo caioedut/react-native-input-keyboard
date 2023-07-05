@@ -1,6 +1,6 @@
 {
   "name": "react-native-input-keyboard",
-  "version": "0.0.1",
+  "version": "0.0.24",
   "keywords": [
     "react",
     "react-native",
@@ -23,10 +23,11 @@
     "build": "pmex tsc --build"
   },
   "devDependencies": {
+    "@types/react": "latest",
     "pmex": "^0.0.34",
-    "rimraf": "^5.0.1",
     "react": "latest",
-    "react-native": "latest"
+    "react-native": "latest",
+    "rimraf": "^5.0.1"
   },
   "peerDependencies": {
     "react": "*",
