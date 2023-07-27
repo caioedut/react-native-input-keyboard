@@ -19,15 +19,18 @@
   ],
   "main": "dist/index.js",
   "scripts": {
-    "prebuild": "pmex rimraf ./dist",
-    "build": "pmex tsc --build"
+    "test": "tsx scripts/test.ts",
+    "build": "tsx scripts/build.ts",
+    "publish:stable": "tsx scripts/publish.ts"
   },
   "devDependencies": {
-    "@types/react": "latest",
+    "@types/react": "^18.2.17",
     "pmex": "^0.0.34",
-    "react": "latest",
-    "react-native": "latest",
-    "rimraf": "^5.0.1"
+    "prettier": "^3.0.0",
+    "react": "^18.2.0",
+    "react-native": "^0.72.3",
+    "tsx": "^3.12.7",
+    "typescript": "^5.1.6"
   },
   "peerDependencies": {
     "react": "*",
