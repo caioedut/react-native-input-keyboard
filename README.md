@@ -26,15 +26,15 @@ Expo is fully supported.
 
 ```js
 import { TextInput } from 'react-native';
-import ReactNativeInputKeyboard from 'react-native-input-keyboard';
+import InputKeyboard from 'react-native-input-keyboard';
 
 function Screen() {
     return (
-      <ReactNativeInputKeyboard>
+      <InputKeyboard>
         {/* ... */}
         <TextInput />
         {/* ... */}
-      </ReactNativeInputKeyboard>
+      </InputKeyboard>
     )
 }
 ```
