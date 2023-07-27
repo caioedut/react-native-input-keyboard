@@ -4,8 +4,6 @@
 
 This component will automatically the screen to remain the focused input visible while the virtual keyboard is displayed.
 
----
-
 ## Installation
 
 `yarn add react-native-input-keyboard`
@@ -14,13 +12,9 @@ OR
 
 `npm install react-native-input-keyboard`
 
----
-
 ## Expo
 
 Expo is fully supported.
-
----
 
 ## Usage
 
@@ -38,8 +32,6 @@ function Screen() {
     )
 }
 ```
-
----
 
 ## Props
 
