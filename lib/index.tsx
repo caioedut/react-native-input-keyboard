@@ -1,5 +1,11 @@
 import React from 'react';
-import { GestureResponderEvent, Keyboard, KeyboardAvoidingView, KeyboardAvoidingViewProps } from 'react-native';
+import {
+  GestureResponderEvent,
+  Keyboard,
+  KeyboardAvoidingView,
+  KeyboardAvoidingViewProps,
+  Platform,
+} from 'react-native';
 
 export type ReactNativeInputKeyboardProps = {
   offset?: number;
@@ -18,9 +24,10 @@ export default function ReactNativeInputKeyboard({
 }: ReactNativeInputKeyboardProps) {
   return (
     <KeyboardAvoidingView
+      style={{ flex: 1 }}
       {...rest}
       enabled={enabled}
-      behavior="position"
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={offset}
       onStartShouldSetResponder={() => enabled}
       onResponderGrant={(e) => {
