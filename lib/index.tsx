@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  GestureResponderEvent,
-  Keyboard,
-  KeyboardAvoidingView,
-  KeyboardAvoidingViewProps,
-  Platform,
-} from 'react-native';
+import { GestureResponderEvent, Keyboard, KeyboardAvoidingView, KeyboardAvoidingViewProps } from 'react-native';
 
 export type ReactNativeInputKeyboardProps = {
   offset?: number;
@@ -16,6 +10,7 @@ export type ReactNativeInputKeyboardProps = {
 >;
 
 export default function ReactNativeInputKeyboard({
+  enabled = true,
   offset,
   onPress,
   children,
@@ -24,9 +19,10 @@ export default function ReactNativeInputKeyboard({
   return (
     <KeyboardAvoidingView
       {...rest}
+      enabled={enabled}
+      behavior="position"
       keyboardVerticalOffset={offset}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      onStartShouldSetResponder={() => true}
+      onStartShouldSetResponder={() => enabled}
       onResponderGrant={(e) => {
         typeof onPress === 'function' ? onPress(e) : Keyboard.dismiss();
       }}
