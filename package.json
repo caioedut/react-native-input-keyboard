@@ -1,6 +1,6 @@
 {
   "name": "react-native-input-keyboard",
-  "version": "0.0.29",
+  "version": "0.0.3",
   "keywords": [
     "react",
     "react-native",
@@ -19,13 +19,14 @@
   ],
   "main": "dist/index.js",
   "scripts": {
+    "example": "tsx scripts/example.ts",
     "test": "tsx scripts/test.ts",
     "build": "tsx scripts/build.ts",
     "publish:stable": "tsx scripts/publish.ts"
   },
   "devDependencies": {
     "@types/react": "^18.2.17",
-    "pmex": "^0.0.34",
+    "pmex": "^0.0.35",
     "prettier": "^3.0.0",
     "react": "^18.2.0",
     "react-native": "^0.72.3",
