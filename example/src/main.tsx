@@ -1,11 +1,12 @@
 import { Text, TextInput, useWindowDimensions, View } from 'react-native';
+
 import InputKeyboard from 'react-native-input-keyboard';
 
 export default function Main() {
   const { height } = useWindowDimensions();
 
   return (
-    <View style={{ flex: 1 }}>
+    <InputKeyboard>
       <View
         style={{
           justifyContent: 'center',
@@ -22,6 +23,6 @@ export default function Main() {
           style={{ borderWidth: 0, backgroundColor: '#dddddd', padding: 8 }}
         />
       </View>
-    </View>
+    </InputKeyboard>
   );
 }

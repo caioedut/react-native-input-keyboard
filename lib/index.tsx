@@ -1,5 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Animated, GestureResponderEvent, Keyboard, TextInput, useWindowDimensions, ViewProps } from 'react-native';
+import {
+  Animated,
+  GestureResponderEvent,
+  Keyboard,
+  TextInput,
+  useWindowDimensions,
+  EmitterSubscription,
+  Platform,
+  ViewProps,
+} from 'react-native';
 
 import measure from './measure';
 
@@ -28,17 +37,22 @@ export default function InputKeyboard({
   useEffect(() => {
     if (!enabled) return;
 
-    const showListener = Keyboard.addListener('keyboardDidShow', ({ endCoordinates }) => {
-      setKbHeight(endCoordinates.height);
-    });
+    const listeners: EmitterSubscription[] = [];
 
-    const hideListener = Keyboard.addListener('keyboardDidHide', () => {
-      setKbHeight(0);
-    });
+    if (Platform.OS === 'ios') {
+      listeners.push(
+        Keyboard.addListener('keyboardWillShow', (e) => setKbHeight(e.endCoordinates.height)),
+        Keyboard.addListener('keyboardWillHide', () => setKbHeight(0)),
+      );
+    } else {
+      listeners.push(
+        Keyboard.addListener('keyboardDidShow', (e) => setKbHeight(e.endCoordinates.height)),
+        Keyboard.addListener('keyboardDidHide', () => setKbHeight(0)),
+      );
+    }
 
     return () => {
-      showListener.remove();
-      hideListener.remove();
+      listeners.forEach((listener) => listener.remove());
     };
   }, [enabled]);
 
@@ -54,9 +68,10 @@ export default function InputKeyboard({
         const { y, height } = await measure($input);
         const winHeight = dimensions.height - kbHeight;
         const inputY = y + height;
+        const osPadding = Platform.OS === 'android' ? 24 : 0;
 
         if (inputY > winHeight) {
-          newOffsetY = winHeight - containerY - inputY - height - (offset || 0);
+          newOffsetY = winHeight - containerY - inputY - osPadding - (offset || 0);
         }
       }
 
