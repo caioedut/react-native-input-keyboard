@@ -3,7 +3,7 @@ import { execSync } from 'child_process';
 
 pmex('test');
 
-pmex('tsc --build --force');
+pmex('build');
 
 pmex('npm version patch');
 
