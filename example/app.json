@@ -1,8 +1,8 @@
 {
   "expo": {
     "owner": "caioedut",
-    "name": "react-native-document-example",
-    "slug": "react-native-document-example",
+    "name": "react-native-input-keyboard-example",
+    "slug": "react-native-input-keyboard-example",
     "orientation": "portrait",
     "assetBundlePatterns": [
       "**/*"
