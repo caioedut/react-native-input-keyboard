@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Animated,
+  EmitterSubscription,
   GestureResponderEvent,
   Keyboard,
+  Platform,
   TextInput,
   useWindowDimensions,
-  EmitterSubscription,
-  Platform,
   ViewProps,
 } from 'react-native';
 
@@ -41,8 +41,10 @@ export default function InputKeyboard({
 
     if (Platform.OS === 'ios') {
       listeners.push(
-        Keyboard.addListener('keyboardWillShow', (e) => setKbHeight(e.endCoordinates.height)),
-        Keyboard.addListener('keyboardWillHide', () => setKbHeight(0)),
+        Keyboard.addListener('keyboardWillChangeFrame', (e) => {
+          setKbHeight(0);
+          setTimeout(() => setKbHeight(e.endCoordinates.height), 0);
+        }),
       );
     } else {
       listeners.push(
@@ -81,7 +83,7 @@ export default function InputKeyboard({
         useNativeDriver: true,
       }).start();
     })();
-  }, [dimensions, kbHeight, enabled]);
+  }, [enabled, dimensions, containerY, kbHeight]);
 
   return (
     <Animated.View
