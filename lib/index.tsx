@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
 import {
   Animated,
   EmitterSubscription,
   GestureResponderEvent,
   Keyboard,
+  LayoutChangeEvent,
   Platform,
   TextInput,
   useWindowDimensions,
@@ -85,23 +86,36 @@ export default function InputKeyboard({
     })();
   }, [enabled, dimensions, containerY, kbHeight]);
 
+  const extendedStyle = useMemo(
+    () => [
+      { flex: 1 },
+      ...(Array.isArray(style) ? style : [style]),
+      { transform: [{ translateY: enabled ? offsetAnim : 0 }] },
+    ],
+    [style],
+  );
+
+  const handleLayout = useCallback((event: LayoutChangeEvent) => {
+    setContainerY(event.nativeEvent.layout.y);
+  }, []);
+
+  const handleStartShouldSetResponder = useCallback(
+    () => Boolean(enabled && TextInputState.currentlyFocusedInput()),
+    [enabled],
+  );
+
+  const handleResponderGrant = useCallback(
+    (event: GestureResponderEvent) => (typeof onPress === 'function' ? onPress(event) : Keyboard.dismiss()),
+    [onPress],
+  );
+
   return (
     <Animated.View
-      onLayout={({ nativeEvent }) => {
-        setContainerY(nativeEvent.layout.y);
-      }}
-      onStartShouldSetResponder={() => {
-        return enabled;
-      }}
-      onResponderGrant={(e) => {
-        typeof onPress === 'function' ? onPress(e) : Keyboard.dismiss();
-      }}
+      onLayout={handleLayout}
+      onStartShouldSetResponder={handleStartShouldSetResponder}
+      onResponderGrant={handleResponderGrant}
       {...rest}
-      style={[
-        { flex: 1 },
-        ...(Array.isArray(style) ? style : [style]),
-        { transform: [{ translateY: enabled ? offsetAnim : 0 }] },
-      ]}
+      style={extendedStyle}
     >
       {children}
     </Animated.View>

@@ -9,7 +9,7 @@ export default async function measure($element: Component & NativeMethods): Prom
 }> {
   return new Promise((resolve, reject) => {
     if (!$element) {
-      return reject('Unable to find the elementr');
+      return reject('Unable to find the element');
     }
 
     $element.measureInWindow((x, y, width, height) => {

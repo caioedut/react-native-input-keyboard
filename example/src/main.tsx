@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Text, TextInput, useWindowDimensions, View } from 'react-native';
+import { ScrollView, Text, TextInput, useWindowDimensions, View } from 'react-native';
 import InputKeyboard from 'react-native-input-keyboard';
 
 export default function Main() {
@@ -14,25 +14,44 @@ export default function Main() {
         style={{
           justifyContent: 'center',
           alignItems: 'center',
-          height: height - 160,
+          backgroundColor: 'gold',
+          height: height / 2,
         }}
       >
-        <Text style={{ fontSize: 16 }}>Press anywhere to hide the Keyboard!</Text>
+        <Text style={{ fontSize: 16 }}>Try gestures outside the scroll view.</Text>
       </View>
+      <ScrollView
+        style={{
+          backgroundColor: 'orange',
+          height: height / 2,
+        }}
+      >
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: height / 2,
+          }}
+        >
+          <Text style={{ fontSize: 16 }}>Try gestures inside the scroll view.</Text>
 
-      <TextInput
-        ref={firstRef}
-        placeholder="Focus/blur this input"
-        style={styles.input}
-        onSubmitEditing={() => secondRef.current.focus()}
-      />
+          <Text style={{ fontSize: 16, marginTop: 32 }}>Scroll down to view the inputs.</Text>
+        </View>
 
-      <TextInput
-        ref={secondRef}
-        placeholder="Focus/blur this input"
-        style={styles.input}
-        onSubmitEditing={() => firstRef.current.focus()}
-      />
+        <TextInput
+          ref={firstRef}
+          placeholder="Focus/blur this input"
+          style={styles.input}
+          onSubmitEditing={() => secondRef.current.focus()}
+        />
+
+        <TextInput
+          ref={secondRef}
+          placeholder="Focus/blur this input"
+          style={styles.input}
+          onSubmitEditing={() => firstRef.current.focus()}
+        />
+      </ScrollView>
     </InputKeyboard>
   );
 }
