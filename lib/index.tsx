@@ -14,6 +14,8 @@ import type { InputKeyboardProps } from './types';
 
 const { State: TextInputState } = TextInput;
 
+export { InputKeyboardProps };
+
 export default function InputKeyboard({
   enabled = true,
   offset,
