@@ -5,8 +5,8 @@ import InputKeyboard from 'react-native-input-keyboard';
 export default function Main() {
   const { height } = useWindowDimensions();
 
-  const firstRef = useRef<any>();
-  const secondRef = useRef<any>();
+  const firstRef = useRef<any>(undefined);
+  const secondRef = useRef<any>(undefined);
 
   return (
     <InputKeyboard>

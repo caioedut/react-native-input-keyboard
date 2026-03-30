@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Animated,
   EmitterSubscription,
@@ -8,18 +8,11 @@ import {
   Platform,
   TextInput,
   useWindowDimensions,
-  ViewProps,
 } from 'react-native';
-
 import measure from './measure';
+import type { InputKeyboardProps } from './types';
 
 const { State: TextInputState } = TextInput;
-
-export type InputKeyboardProps = {
-  enabled?: boolean;
-  offset?: number;
-  onPress?: (event: GestureResponderEvent) => void;
-} & Omit<ViewProps, 'onStartShouldSetResponder' | 'onResponderGrant'>;
 
 export default function InputKeyboard({
   enabled = true,
@@ -44,7 +37,7 @@ export default function InputKeyboard({
       listeners.push(
         Keyboard.addListener('keyboardWillChangeFrame', (e) => {
           setKbHeight(0);
-          setTimeout(() => setKbHeight(e.endCoordinates.height), 0);
+          setTimeout(() => setKbHeight(e.endCoordinates.height), 10);
         }),
       );
     } else {
