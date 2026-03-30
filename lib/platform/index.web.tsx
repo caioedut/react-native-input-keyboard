@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
-import type { InputKeyboardProps } from './types';
+import type { InputKeyboardProps } from '../types';
 
 export { InputKeyboardProps };
 
