@@ -4,7 +4,6 @@ import {
   EmitterSubscription,
   GestureResponderEvent,
   Keyboard,
-  LayoutChangeEvent,
   Platform,
   TextInput,
   useWindowDimensions,
@@ -27,9 +26,9 @@ export default function InputKeyboard({
   const dimensions = useWindowDimensions();
 
   const offsetAnim = useRef(new Animated.Value(0)).current;
-  const [containerY, setContainerY] = useState(0);
-  const [kbHeight, setKbHeight] = useState(0);
+  const [kbHeight, setKbHeight] = useState<number>(0);
 
+  // Monitor keyboard height while handling iOS-specific AutoFill frame glitches
   useEffect(() => {
     if (!enabled) return;
 
@@ -38,8 +37,18 @@ export default function InputKeyboard({
     if (Platform.OS === 'ios') {
       listeners.push(
         Keyboard.addListener('keyboardWillChangeFrame', (e) => {
+          const nextHeight = e.endCoordinates.height;
+
+          // CRITICAL FIX: If iOS sends a 0 height frame during typing
+          // while the keyboard should remain open, ignore this ghost frame.
+          if (nextHeight === 0) return;
+
+          setKbHeight((current) => (current !== nextHeight ? nextHeight : current));
+        }),
+
+        // Solely responsible for resetting the keyboard height on iOS
+        Keyboard.addListener('keyboardWillHide', () => {
           setKbHeight(0);
-          setTimeout(() => setKbHeight(e.endCoordinates.height), 10);
         }),
       );
     } else {
@@ -57,29 +66,49 @@ export default function InputKeyboard({
   useEffect(() => {
     if (!enabled) return;
 
-    (async () => {
-      let newOffsetY = 0;
+    let isMounted = true;
 
-      const $input = TextInputState.currentlyFocusedInput();
-
-      if ($input) {
-        const { y, height } = await measure($input);
-        const winHeight = dimensions.height - kbHeight;
-        const inputY = y + height;
-        const osPadding = Platform.OS === 'android' ? 24 : 0;
-
-        if (inputY > winHeight) {
-          newOffsetY = winHeight - containerY - inputY - osPadding - (offset || 0);
-        }
-      }
-
+    // If the keyboard is closed, reset the offset layout immediately
+    if (kbHeight === 0) {
       Animated.timing(offsetAnim, {
-        toValue: newOffsetY,
+        toValue: 0,
         duration: 200,
         useNativeDriver: true,
       }).start();
-    })();
-  }, [enabled, dimensions, containerY, kbHeight]);
+      return;
+    }
+
+    // Add a slight delay to wait for iOS to finish text selection
+    // or autofill layouts before measuring the input window coordinates
+    setTimeout(async () => {
+      const $input = TextInputState.currentlyFocusedInput();
+      if (!$input || !isMounted) return;
+
+      const { y, height } = await measure($input);
+
+      // Double-check in case the focus changed or the component unmounted during the async await bridge call
+      if (!isMounted || $input !== TextInputState.currentlyFocusedInput()) return;
+
+      const inputBottom = y + height;
+      const availableSpace = dimensions.height - kbHeight;
+      const osPadding = Platform.OS === 'android' ? 24 : 0;
+      const totalOffset = (offset || 0) + osPadding;
+
+      if (inputBottom > availableSpace) {
+        const targetOffset = availableSpace - inputBottom - totalOffset;
+
+        Animated.timing(offsetAnim, {
+          toValue: targetOffset,
+          duration: 200,
+          useNativeDriver: true,
+        }).start();
+      }
+    }, 20); // 20ms delay perfectly avoids race conditions with iOS keychain/selection tooltips
+
+    return () => {
+      isMounted = false;
+    };
+  }, [enabled, kbHeight, offset, dimensions.height]);
 
   const extendedStyle = useMemo(
     () => [
@@ -87,12 +116,8 @@ export default function InputKeyboard({
       ...(Array.isArray(style) ? style : [style]),
       { transform: [{ translateY: enabled ? offsetAnim : 0 }] },
     ],
-    [style],
+    [style, enabled, offsetAnim],
   );
-
-  const handleLayout = useCallback((event: LayoutChangeEvent) => {
-    setContainerY(event.nativeEvent.layout.y);
-  }, []);
 
   const handleStartShouldSetResponder = useCallback(
     () => Boolean(enabled && TextInputState.currentlyFocusedInput()),
@@ -106,7 +131,6 @@ export default function InputKeyboard({
 
   return (
     <Animated.View
-      onLayout={handleLayout}
       onStartShouldSetResponder={handleStartShouldSetResponder}
       onResponderGrant={handleResponderGrant}
       {...rest}

@@ -25,6 +25,9 @@ export default function Main() {
           backgroundColor: 'orange',
           height: height / 2,
         }}
+        contentContainerStyle={{
+          paddingBottom: 48,
+        }}
       >
         <View
           style={{
@@ -47,6 +50,7 @@ export default function Main() {
 
         <TextInput
           ref={secondRef}
+          secureTextEntry
           placeholder="Focus/blur this input"
           style={styles.input}
           onSubmitEditing={() => firstRef.current.focus()}

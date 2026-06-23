@@ -11,6 +11,8 @@ node_modules/
 coverage/
 
 # npm
+bun.lock
+bun.lockb
 yarn.lock
 package-lock.json
 npm-debug.log*
